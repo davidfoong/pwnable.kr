@@ -160,3 +160,5 @@ Which turned out to be the flag!
 
 
 # 6: coin1
+
+Work in progress. Need to finish python script which will connect and use binary search to complete the game.
