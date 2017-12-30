@@ -1,5 +1,5 @@
 # pwnable.kr
-Just some of my thought process going through the Toddler's Bottle beginner levels.
+Just some of my thought process going through the Toddler's Bottle beginner levels. Decided not to include the actual flag for most of them in-case anyone reading wants to try it out for themself.
 
 # 1: [fd]
 
