@@ -127,3 +127,33 @@ env x='() { :;}; /bin/cat ~/flag' ~/shellshock
 ```
 This command adds on extra code to the shellshock file, allowing us to execute our code inside the program that has higher privileges. Running the command gives us the flag!.
 
+
+# 5: flag
+I started this one off by downloading the file and making it executable. Running it gave me this:
+```c
+david@david-VirtualBox:~/Documents/pwnable5$ ./flag
+I will malloc() and strcpy the flag there. take it.
+```
+Cryptic. The next thing I did was open the file in vi. The file contains a ton of gibberish, so I checked the strings with
+```c
+strings flag > hello
+```
+Looking through the file we see a bunch of random text with some broken up lines. One thing I noticed is the line "UPX!" appearing once at the very top of the page, and twice at the very bottom of the page. Googling this line brought me to here: https://en.wikipedia.org/wiki/UPX. <br><br>
+As it turns out, UPX is a packaging tool for executables. Let's download it and see what we can do.
+```c
+david@david-VirtualBox:~/Documents/pwnable5$ upx -d flag
+                       Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2013
+UPX 3.91        Markus Oberhumer, Laszlo Molnar & John Reiser   Sep 30th 2013
+
+        File size         Ratio      Format      Name
+   --------------------   ------   -----------   -----------
+    887219 <-    335288   37.79%  linux/ElfAMD   flag
+
+Unpacked 1 file.
+david@david-VirtualBox:~/Documents/pwnable5$ ls
+flag  hello
+```
+
+So we still have the same flag file. Running it produced the same output message Next, I opened it up. Immediately, the file looks different. I scrolled around for a while before deciding to look for the output message. Using vim to search for malloc brought me to next to a message: <br>UPX...? sounds like a delivery service :)
+Which turned out to be the flag!
