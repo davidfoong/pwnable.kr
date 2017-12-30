@@ -1,7 +1,7 @@
 # pwnable.kr
 Just some of my thought process going through the Toddler's Bottle beginner levels.
 
-#1: [fd]
+# 1: [fd]
 
 Looking at the program, I see the program is looking for an input of LETMEWIN to get the flag. However, you can't just enter it as an argument.
 The clue asks you what a file descriptor is. After googling, I learned that there are three file descriptors. Standard input is accessed at integer value 0,
@@ -13,7 +13,7 @@ took 0x1234, converted it to decimal, and entered in 4660 as the file argument. 
 the flag was returned.
 
 
-#2: collision
+# 2: collision
 
 Looking at the code for col.c, we see a few restrictions for our argument. The passcode length must be length 20.
 The password you enter is taken into chunks of four and totalled. Therefore, we need 5 integers whose total should be equal to 0x21DD09EC. 
@@ -37,7 +37,7 @@ have 113626824 * 4 + 113626828 = 568134124. So we have to enter those in hex. I 
 The flag was returned!
 
 
-#3: mistake
+# 3: mistake
 
 This one used some knowledge from the first one I did, fd. 
 
@@ -107,3 +107,23 @@ error occurs at the beginning with the file descriptor.
 Here we can see that the fd is being set to the outcome of open(...) < 0, instead of the intended setting of fd to the comparison of open(...) and 0.<br>
 This is always going to be false, because the password file should open correctly. Therefore, fd is always going to be zero, and it will get its value from stdin. This means that later on the program will compare the flipped input to our stdin. All we need to do is find two 10-digit values that equal each other when one has the last bit of every byte flipped. 0000000000 and 1111111111 work just fine, since we flip 0000 to 0001.<br>
 This returns the flag!
+
+
+# 4: shellshock
+
+This one actually took me a little while to get the formatting correct, but the basic idea is to use the shellshock exploit. The shellshock exploit allows an attacker to inject code into a bash script. Opening up the c++ file shows a small program:
+```c
+#include <stdio.h>
+int main(){
+        setresuid(getegid(), getegid(), getegid());
+        setresgid(getegid(), getegid(), getegid());
+        system("/home/shellshock/bash -c 'echo shock_me'");
+        return 0;
+}
+```
+All it does is tell the user to "shock_me". Googling around let me to this: http://resources.infosecinstitute.com/practical-shellshock-exploitation-part-1/, which eventually led to the command: 
+```c
+env x='() { :;}; /bin/cat ~/flag' ~/shellshock
+```
+This command adds on extra code to the shellshock file, allowing us to execute our code inside the program that has higher privileges. Running the command gives us the flag!.
+
