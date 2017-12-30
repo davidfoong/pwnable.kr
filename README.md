@@ -155,5 +155,8 @@ david@david-VirtualBox:~/Documents/pwnable5$ ls
 flag  hello
 ```
 
-So we still have the same flag file. Running it produced the same output message Next, I opened it up. Immediately, the file looks different. I scrolled around for a while before deciding to look for the output message. Using vim to search for malloc brought me to next to a message: <br>UPX...? sounds like a delivery service :)
+So we still have the same flag file. Running it produced the same output message Next, I opened it up. Immediately, the file looks different. I scrolled around for a while before deciding to look for the output message. Using vim to search for malloc brought me to next to a message: <br>UPX...? sounds like a delivery service :)<br>
 Which turned out to be the flag!
+
+
+# 6: coin1
